@@ -1,0 +1,42 @@
+{
+  "name": "smartget",
+  "version": "0.0.1",
+  "description": "A smart CLI http file downloader",
+  "main": "index.js",
+  "preferGlobal": true,
+  "keywords": ["download", "http", "https", "soundcloud", "tvrain"],
+  "homepage": "http://github.com/minibikini/smartget",
+  "bugs": {
+      "url": "http://github.com/minibikini/smartget/issues",
+      "email": "egor@kislitsyn.com"
+    },
+  "licenses": [{
+    "type": "MIT",
+  }],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": {
+    "name": "Egor Kislitsyn",
+    "email": "egor@kislitsyn.com",
+    "url": "http://kislitsyn.com/"
+  },
+  "bin": {
+    "smartget": "./bin/smartget"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/minibikini/smartget.git"
+  },
+  "dependencies": {
+    "coffee-script": "*",
+    "commander": "*",
+    "request": "*",
+    "progress": "*",
+    "async": "*",
+    "jquery": "*",
+    "jsdom": "*",
+    "node-xml-lite": "*"
+  }
+}
