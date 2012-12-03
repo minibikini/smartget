@@ -11,7 +11,7 @@
       "email": "egor@kislitsyn.com"
     },
   "licenses": [{
-    "type": "MIT",
+    "type": "MIT"
   }],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
