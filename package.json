@@ -37,6 +37,7 @@
     "async": "*",
     "jquery": "*",
     "jsdom": "*",
-    "node-xml-lite": "*"
+    "node-xml-lite": "*",
+    "humanize": "*"
   }
 }

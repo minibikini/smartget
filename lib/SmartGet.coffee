@@ -6,6 +6,7 @@ urlLib = require "url"
 ProgressBar = require 'progress'
 EventEmitter = require('events').EventEmitter
 async = require "async"
+humanize = require "humanize"
 
 plugins = ["soundcloud.com", "tvrain.ru"]
 
@@ -77,8 +78,8 @@ module.exports = class SmartGet extends EventEmitter
       res.pipe fs.createWriteStream task.filename, opts
 
       len = parseInt(res.headers['content-length'], 10)
-      console.log "    size: #{(len/1024/1024).toFixed(2)} Mb"
-      bar = new ProgressBar '    downloading [:bar] :percent :eta'
+      console.log "    size: #{humanize.filesize len}"
+      bar = new ProgressBar '    downloading [:bar] :percent :etas'
         complete: '='
         incomplete: ' '
         width: 50
