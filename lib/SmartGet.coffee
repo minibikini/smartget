@@ -65,7 +65,7 @@ module.exports = class SmartGet extends EventEmitter
     http.get(options, @onServerResponse(task)).on 'error', (e) =>
       task.error ?= 0
       @get task if ++task.error < 100
-      console.log 'problem with request: ' + e.message
+      console.log '    problem with request: ' + e.message
 
   onServerResponse: (task) -> (res) =>
     dl = (code) =>
@@ -77,17 +77,17 @@ module.exports = class SmartGet extends EventEmitter
       res.pipe fs.createWriteStream task.filename, opts
 
       len = parseInt(res.headers['content-length'], 10)
-      console.log "size: #{(len/1024/1024).toFixed(2)} Mb"
-      bar = new ProgressBar '  downloading [:bar] :percent :eta'
+      console.log "    size: #{(len/1024/1024).toFixed(2)} Mb"
+      bar = new ProgressBar '    downloading [:bar] :percent :eta'
         complete: '='
         incomplete: ' '
-        width: 100
+        width: 50
         total: len
       res.on 'data', (chunk) ->
         bar.tick chunk.length
 
       res.on 'end', (chunk) =>
-        console.log "\nSaved to #{task.filename}\n"
+        console.log "\n    Saved to #{task.filename}\n"
 
         done = => @emit "ready"
 
@@ -99,10 +99,10 @@ module.exports = class SmartGet extends EventEmitter
     switch res.statusCode
       when 200, 206 then dl()
       when 416
-        console.log "The file is already downloaded."
+        console.log "    The file is already downloaded."
         @emit "ready"
       when 302
         task.url = urlLib.parse res.headers.location
-        console.log "Redirect ro #{task.url.href}"
+        console.log "    Redirect ro #{task.url.href}"
         @get task
       else console.log "code", res.statusCode, res.headers

@@ -1,6 +1,6 @@
 {
   "name": "smartget",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A smart CLI http file downloader",
   "main": "index.js",
   "preferGlobal": true,
