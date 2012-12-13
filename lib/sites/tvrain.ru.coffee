@@ -4,7 +4,7 @@ jsdom = require "jsdom"
 jquery = require("jquery")
 xml = require("node-xml-lite")
 qs = require "querystring"
-# async =
+async = require "async"
 
 module.exports = tvrain = (smartGet, url, done, filename, isPart = no) ->
   url = urlLib.parse url
@@ -15,7 +15,6 @@ module.exports = tvrain = (smartGet, url, done, filename, isPart = no) ->
     [name, id] = a[a.length-2].split("-")
     filename = name
 
-  request url.href, (err, res, body) ->
   jsdom.env
     html: url.href
     done: (err, win) ->
@@ -23,22 +22,26 @@ module.exports = tvrain = (smartGet, url, done, filename, isPart = no) ->
       $ = jquery.create win
       return unless url = $("#player").attr("src")
 
+      isGettingParts = no
+
       unless isPart
         $episodes = $('#episodes a')
-        episodes = []
 
         if $episodes.length
+          console.log "TVRain.ru - found parts of the video"
+          isGettingParts = yes
           filename += "-1"
           epid = 1
-          $episodes.map (i, el) ->
+
+          get = (el, done) ->
             link = "http://tvrain.ru" + $(el).attr("href")
-            if link
-              tvrain smartGet, link, (->), "#{name}-#{++epid}", yes
+            tvrain smartGet, link, done, "#{name}-#{++epid}", yes
+
+          async.forEach $episodes, get, (err) -> done()
 
       query = qs.parse urlLib.parse(url).query
 
       apiUrl = "http://pub.tvigle.ru/xml/index.php?prt=#{query.prt}&id=#{query.id}&mode=1"
-      console.log "aa"
 
       request apiUrl, (err, res, body) ->
         console.log err, apiUrl if err?
@@ -49,5 +52,4 @@ module.exports = tvrain = (smartGet, url, done, filename, isPart = no) ->
           url: urlLib.parse url
           filename: "#{filename}.mp4"
 
-        done()
-
+        done() unless isGettingParts

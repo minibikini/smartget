@@ -10,9 +10,9 @@ async = require "async"
 plugins = ["soundcloud.com", "tvrain.ru"]
 
 module.exports = class SmartGet extends EventEmitter
+  isWorking: yes
   tasks: []
   constructor: (urls) ->
-    console.log "#{urls.length} to download"
     @on "ready", @get
 
     add = (url, done) =>
@@ -41,7 +41,7 @@ module.exports = class SmartGet extends EventEmitter
   exit: ->
     console.log "All jobs are done."
     console.log "Bye!"
-    process.exit()
+    # process.exit()
 
   get: (task = null) ->
     unless task?
@@ -57,10 +57,10 @@ module.exports = class SmartGet extends EventEmitter
       fs.statSync(task.filename).size
     else 0
 
-    console.log "Getting #{task.filename}"
+    console.log "\n => Getting #{task.filename}"
     if task.hasBytes
       options.headers = "Range": "bytes=#{task.hasBytes}-"
-      console.log "Resuming previous download."
+      console.log "    Resuming previous download."
 
     http.get(options, @onServerResponse(task)).on 'error', (e) =>
       task.error ?= 0
