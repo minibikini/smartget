@@ -58,10 +58,11 @@ module.exports = class SmartGet extends EventEmitter
       fs.statSync(task.filename).size
     else 0
 
-    console.log "\n => Getting #{task.filename}"
+    console.log "\n => #{task.filename}"
     if task.hasBytes
       options.headers = "Range": "bytes=#{task.hasBytes}-"
-      console.log "    Resuming previous download."
+      haveSize = humanize.filesize task.hasBytes
+      console.log "    Resuming previous download (#{haveSize} downloaded already)"
 
     http.get(options, @onServerResponse(task)).on 'error', (e) =>
       task.error ?= 0
@@ -71,14 +72,20 @@ module.exports = class SmartGet extends EventEmitter
   onServerResponse: (task) -> (res) =>
     dl = (code) =>
       opts = flags: "w"
+
+      len = parseInt(res.headers['content-length'], 10)
+
       if res.statusCode is 206
         opts.flags = "r+"
         opts.start = task.hasBytes
-      file= fs.createWriteStream task.filename, opts
+
+      file = fs.createWriteStream task.filename, opts
+
       res.pipe fs.createWriteStream task.filename, opts
 
-      len = parseInt(res.headers['content-length'], 10)
+
       console.log "    size: #{humanize.filesize len}"
+
       bar = new ProgressBar '    downloading [:bar] :percent :etas'
         complete: '='
         incomplete: ' '
@@ -88,14 +95,9 @@ module.exports = class SmartGet extends EventEmitter
         bar.tick chunk.length
 
       res.on 'end', (chunk) =>
-        console.log "\n    Saved to #{task.filename}\n"
-
+        console.log "\n    Saved to #{task.filename}"
         done = => @emit "ready"
-
-        if task.onDone?
-          task.onDone done
-        else done()
-
+        if task.onDone? then task.onDone done else done()
 
     switch res.statusCode
       when 200, 206 then dl()

@@ -1,6 +1,6 @@
 {
   "name": "smartget",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A smart CLI http file downloader",
   "main": "index.js",
   "preferGlobal": true,
@@ -36,7 +36,7 @@
     "progress": "*",
     "async": "*",
     "jquery": "*",
-    "jsdom": "*",
+    "jsdom": "<3.2.2",
     "node-xml-lite": "*",
     "humanize": "*"
   }
