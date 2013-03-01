@@ -40,9 +40,8 @@ module.exports = class SmartGet extends EventEmitter
     @tasks.push task
 
   exit: ->
-    console.log "All jobs are done."
-    console.log "Bye!"
-    # process.exit()
+    console.log "\nAll jobs are done."
+    process.exit()
 
   get: (task = null) ->
     unless task?
