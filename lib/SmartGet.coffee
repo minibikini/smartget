@@ -85,7 +85,7 @@ module.exports = class SmartGet extends EventEmitter
 
       console.log "    size: #{humanize.filesize len}"
 
-      bar = new ProgressBar '    downloading [:bar] :percent :etas'
+      bar = new ProgressBar '    downloading [:bar] :percent :etas',
         complete: '='
         incomplete: ' '
         width: 50
